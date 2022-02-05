@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org" layout:decorator="layout/main">
+
+<head>
+    <title>Section :: Program</title>
+    <link href="/css/program-breadcrumbs.css" th:href="@{/css/program-breadcrumbs.css}" rel="stylesheet"/>
+
+</head>
+
+<body>
+<section layout:fragment="content" ng-app="sportsRegApp" ng-controller="SectionController" ng-cloak="">
+    <div class="container" style="margin-top: 100px">
+
+        <div layout:include="layout/common-fragment :: program-breadcrumbs"></div>
+        <input type="hidden" name="programId" th:value="${program.id}"/>
+
+        <div class="panel panel-primary" style="margin-top: 20px;">
+
+            <div class="panel-heading contains-buttons">
+
+                <div class="btn-group pull-right">
+                    <a type="button" href="#" class="btn btn-default btn-xs"
+                       ng-click="addSectionToProgram()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                </div>
+
+                <p class="text-uppercase">Sections</p>
+
+            </div>
+
+            <div class="panel-body">
+
+                <div class="alert alert-success" ng-show="alertSuccess">
+                    <button type="button" class="close" data-ng-click="switchBool('alertSuccess')">×</button>
+                    <strong>Done! </strong> <span ng-bind-html="successMessage"/>
+                </div>
+
+                <div class="alert alert-danger" ng-show="alertFailure">
+                    <button type="button" class="close" data-ng-click="switchBool('alertFailure')">×</button>
+                    <strong>Error! </strong> <span ng-bind-html="errorMessage"/>
+                </div>
+
+                <table class="table table-hover table-bordered" style="margin-top: 20px">
+                    <thead>
+                    <tr class="info">
+                        <th th:text="#{label.programForm.sectionName}">Section Name</th>
+                        <th th:text="#{label.programForm.sectionCode}">Section Code</th>
+                        <th th:text="#{label.programForm.openDate}">Start Date</th>
+                        <th th:text="#{label.programForm.closeDate}">End Date</th>
+                        <th th:text="#{label.programForm.spaceLimit}">Space Limit</th>
+                        <td th:text="#{label.programForm.price}">Price</td>
+                        <th th:text="#{label.programForm.meetingTime}">Meeting Time</th>
+                        <th th:text="#{button.edit}">Edit</th>
+                        <th th:text="#{button.delete}">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="section in sections">
+                        <td>{{section.name}}</td>
+                        <td>{{section.sectionCode}}</td>
+                        <td>{{section.openDate | date:'dd-MMMM-yyyy'}}</td>
+                        <td>{{section.closeDate | date:'dd-MMMM-yyyy'}}</td>
+                        <td>{{section.spaceLimit}}</td>
+                        <td>{{section.price}}</td>
+                        <td>{{section.meetingTime}}</td>
+
+                        <td>
+                            <a class="btn" ng-click="editSection(section);">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a class="btn" ng-really-click="deleteSection(section);">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
+                   
+                                        
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel-footer clearfix">
+                <div class="pull-right">
+
+                    <a href="#" th:href="@{/program/list}" class="btn btn-warning">
+                        <span class="glyphicon glyphicon-circle-arrow-left"></span> Back</a>
+
+                    <button type="submit" ng-click="moveToSectionPage()" class="btn btn-success"> Continue <span
+                            class="glyphicon glyphicon-circle-arrow-right"></span></button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<div layout:fragment="custom-scripts">
+    <script src="/js/controllers/section-controller.js" th:src="@{/js/controllers/section-controller.js?version=1.0}"></script>
+    <script src="/js/service/program.service.js" th:src="@{/js/service/program.service.js}"></script>
+</div>
+
+</body>
+</html>

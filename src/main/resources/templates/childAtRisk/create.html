@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org" layout:decorator="layout/main">
+
+<head>
+    <title>Sign Up</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <div class="container" style="margin-top: 20px">
+    	
+    	<div class="panel panel-info col-md-12">
+    		    	
+	    	 
+			<div class="col-md-6">
+				
+				<div>
+    				<h3>Entry form for Child at Risk. Please fill up the required fields!</h3>
+    			</div>
+    			
+		        <div  style="margin-top: 20px">
+		        	
+		            <form class="form-horizontal centered" role="form" th:action="@{/signup}"
+		                  th:object="${signupForm}" method="post" data-toggle="validator">
+		                <div class="panel-body">
+		                 	
+		
+		                    <fieldset class="border">
+		
+		                        <div th:if="${message}" class="alert alert-info">
+		                            <p th:text="${message}"></p>
+		                        </div>
+		
+		                        		
+		                        <div class="form-group required">
+		                            <label class="col-sm-3 control-label"
+		                                   th:text="#{label.registrationForm.name}">Child Name</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="First Name" th:field="*{firstName}"/>
+		                            </div>
+		                            <p class="text-danger"
+		                               th:if="${#fields.hasErrors('firstName')}">
+		                                <span th:errors="*{firstName}">Required</span>
+		                            </p>
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label class="col-sm-3 control-label">Mother Name</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="Mother Name" th:field="*{motherName}"/>
+		                            </div>
+		                           
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label class="col-sm-3 control-label">Father Name</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="First Name" th:field="*{fatherName}"/>
+		                            </div>
+		                            
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label class="col-sm-3 control-label">Gender</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="Gender" th:field="*{gender}"/>
+		                            </div>
+		                            
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label class="col-sm-3 control-label">Age</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="Age" th:field="*{age}"/>
+		                            </div>
+		                            
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label class="col-sm-3 control-label">Height</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="Heigt" th:field="*{height}"/>
+		                            </div>
+		                            
+		                        </div>
+		                        
+		                         <div class="form-group required">
+		                            <label class="col-sm-3 control-label">Skin Color</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="Skin Color" th:field="*{skin}"/>
+		                            </div>
+		                            
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label class="col-sm-3 control-label">Special Remarks</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="Special Remarks" th:field="*{remarks}"/>
+		                            </div>
+		                            
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label class="col-sm-3 control-label">Special Remark</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="text" required="required" class="form-control"
+		                                       placeholder="Special Remarks" th:field="*{specialRemark}"/>
+		                            </div>
+		                            
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label for="text" class="col-sm-3 control-label">Contact Person</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="email" required="required"
+		                                       class="form-control" id="email"
+		                                       placeholder="Name" th:field="*{contactPerson}"/>
+		                            </div>
+		                            <p class="text-danger"
+		                               th:if="${#fields.hasErrors('email')}">
+		                                <span th:errors="*{email}">Required</span>
+		                            </p>
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label for="email" class="col-sm-3 control-label"
+		                                   th:text="#{label.registrationForm.email}">email</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="email" required="required"
+		                                       class="form-control" id="email"
+		                                       placeholder="Email Address" th:field="*{email}"/>
+		                            </div>
+		                            <p class="text-danger"
+		                               th:if="${#fields.hasErrors('email')}">
+		                                <span th:errors="*{email}">Required</span>
+		                            </p>
+		                        </div>
+		                        
+		                        <div class="form-group required">
+		                            <label for="email" class="col-sm-3 control-label"
+		                                   th:text="#{label.registrationForm.email}">Phone</label>
+		
+		                            <div class="col-sm-8">
+		                                <input type="email" required="required"
+		                                       class="form-control" id="email"
+		                                       placeholder="Phone" th:field="*{phone}"/>
+		                            </div>
+		                            <p class="text-danger"
+		                               th:if="${#fields.hasErrors('email')}">
+		                                <span th:errors="*{email}">Required</span>
+		                            </p>
+		                        </div>
+		
+		                       
+		  						<div class="pull-right">
+			                        <button type="submit" class="btn btn-primary btn-danger">
+			                            SUBMIT
+			                        </button>
+		                    	</div>
+		
+		                    </fieldset>
+		                </div>
+		            </form>
+		        </div>
+			</div>
+			<div class="col-md-6">
+	    		
+    			<div style="margin-top: 50px"> 
+								
+						 <div>You can connect us following social networks!</div>
+						 <div>Just Sign In with</div><br/>
+						 <div class="social-buttons">
+							<a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
+							<a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a> 
+						</div>
+									
+								
+								
+				</div>
+	    	</div>
+			
+    	</div>
+
+    </div>
+
+</div>
+
+<div layout:fragment="custom-scripts">
+
+</div>
+</body>
+
+</html>

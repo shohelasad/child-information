@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:th="http://www.thymeleaf.org" layout:decorator="layout/main">
+
+<head>
+    <title>Programs</title>
+</head>
+
+<body>
+
+<section layout:fragment="content" ng-app="sportsRegApp">
+
+    <div class="container marketing" style="margin-top: 100px">
+        <div>
+
+            <p sec:authorize="hasRole('ROLE_ADMIN')" align="right">
+                <a href="#" class="btn btn-info" th:href="@{/program/create/overview}">
+                    <span class="glyphicon glyphicon-plus"></span> Add New program
+                </a>
+            </p>
+        </div>
+
+        <div th:if="${message}" class="alert alert-info">
+            <p th:text="${message}"></p>
+        </div>
+
+        <div class="panel panel-primary" style="margin-top: 20px;">
+            <div class="panel-heading"><span>Programs</span></div>
+
+            <div class="panel-body">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr class="info">
+                        <th th:text="#{label.programForm.name}">Name</th>
+                        <th th:text="#{label.programForm.openStatus}">Registration Status</th>
+                        <th th:text="#{label.programForm.publishStatus}">Publish Status</th>
+                        <th th:text="#{label.programForm.filled}">Filled</th>
+                        <th th:text="#{button.view.registrants}">Registrants</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="program, iterStat : ${page.content}" th:class="${iterStat.odd}? 'odd'">
+                        <td>
+                            <a th:href="@{/organizations/__${program.organization.slug}__/programs/__${program.slug}__}"> <span th:text="${program.name}"></span></a>
+                        </td>
+                        <td th:text="${program.publish.programStatus}"/>
+                        <td th:text="${program.publish.publishStatus}"/>
+                        <td th:text="${program.registrationCount}"/> 
+                        <td><a href="#" class="btn" title="View Registrants"
+                                              th:href="@{/program/__${program.id}__/view-registrants}">
+                            <span class="glyphicon glyphicon-user"></span></a>
+                        </td>
+                                
+                        <td>
+                            <div class="btn-group">
+                                <a type="button" class="btn btn-default btn-sm" href="#" th:href="@{'/program/edit/' + ${program.id}}">
+                                    <span class="glyphicon glyphicon-edit"></span> Edit
+                                </a>
+
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle"
+                                        data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+
+                                <ul class="dropdown-menu" role="menu">
+
+                                    <li role="presentation">
+                                        <a th:href="@{'/program/clone/' + ${program.id}}">
+                                            <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Clone
+                                        </a>
+                                        
+                                    </li>
+
+                                    <li role="presentation">
+                                        <a th:href="@{#}" th:onclick="'javascript:deleteProgram(\'' + ${program.id} + '\');'">
+			                                <span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Delete
+			                            </a>
+			                            <script type="text/javascript">
+			                                function deleteProgram(formId){
+			                                    if(confirm("Are you sure you want to delete this? This action cannot be undone.")) {
+			                                        $("#delete-program-"+formId).submit();
+			                                    }
+			                                }
+			                            </script>
+			                            <form style="visibility: hidden" th:id="'delete-program-' +${program.id}" method="post" action="#" th:action="@{/program/delete/__${program.id}__}">
+			                            </form>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div layout:include="layout/common-fragment :: pagination"></div>
+
+    </div>
+</section>
+
+<div layout:fragment="custom-scripts">
+
+    <script type="text/javascript">
+        function deleteConfirm() {
+                $("#form-delete").submit();
+        }
+    </script>
+</div>
+
+</body>
+</html>

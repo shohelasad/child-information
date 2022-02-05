@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org" layout:decorator="layout/main">
+
+<head>
+    <title>Registrant Single</title>
+</head>
+
+<body>
+
+<section layout:fragment="content">
+
+    <div class="container marketing" style="margin-top: 100px">
+
+        <div th:if="${message}" class="alert alert-info">
+            <p th:text="${message}"></p>
+        </div>
+
+    </div>
+</section>
+
+<div layout:fragment="custom-scripts">
+
+</div>
+
+</body>
+</html>

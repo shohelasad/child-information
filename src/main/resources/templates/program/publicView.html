@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout/main">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title th:text="${program.name}"></title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container" style="margin-top: 100px">
+        <div class="page-header">
+            <h1 class="text-primary" th:text="${program.name}"></h1>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div th:utext="${program.description}"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-4">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Organization</div>
+                    <div class="panel-body">
+                        <div class="pull-center">
+                            <a th:href="@{/organizations/__${organization.slug}__}">
+                                <strong>
+                                    <span th:text="${organization.name}"></span>
+                                </strong>
+                            </a>
+                            <br/> <br/>
+
+                            <a th:href="@{/organizations/__${organization.slug}__}" class="btn btn-info">Read more about
+                                us</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Contact Us</div>
+                    <div class="panel-body">
+                        <div th:each="contact : ${program.contacts}">
+
+                            <div th:utext="${contact.toString()}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Locations</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div th:each="location : ${program.locations}">
+
+                            <div th:utext="${location.toString()}"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div name="register" class="row" ng-app="sportsRegApp" ng-controller="RegistrationController" ng-cloak=""
+             style="margin: 20px">
+
+            <form name="participantForm" class="form-horizontal" role="form" novalidate="novalidate"
+                  ng-submit="submitForm();" ng-submit-force="true">
+                <input id="programId" type="hidden" th:value="${program.id}"/>
+                <input th:if="${registration!=null}" id="registrationId" type="hidden" th:value="${registration.id}"/>
+
+                <div id="errorBlock" class="alert alert-danger" ng-show="hasError">
+                    <button type="button" class="close" data-dismiss="alert" ng-click="clearErrors()"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p ng-repeat="error in formErrors">
+                        <strong>Error !</strong>
+                        {{error}}
+                    </p>
+                </div>
+
+                <div ng-show="sections.length > 0" class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="text-uppercase">Section</span>
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="section in sections">
+                            	<div class="form-group">
+                                <td><label>
+                                    <input type="checkbox" ng-model="section.selected"
+                                           ng-click="updateSelection($index, sections)" ng-checked="section.selected"/>
+                                    &nbsp;&nbsp; {{section.name}}
+                                </label></td>
+                                <td>{{section.openDate| date}} to {{section.closeDate| date}}</td>
+                                <td>Space remaining: {{section.spaceLimit}}</td>
+                                <td>Price: $ {{section.price}}</td>
+                                </div>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <!-- Form Directive that render the entire form -->
+                <form-directive form="form"></form-directive>
+
+                <div ng-show="policies.length> 0" class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="text-uppercase">Policies</span>
+                    </div>
+                    <div class="panel-body">
+
+                        <p class="text-justify">
+                            Please read the following policy documents.
+                        </p>
+
+                        <br/><br/>
+
+                        <table class="table" ng-repeat="policy in policies">
+                            <tr>
+                                <td>
+                                    <p><strong>{{policy.title}}</strong></p>
+
+                                    <div ng-bind-html="policy.details"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary" ng-show="signatures.length > 0">
+                    <div class="panel-heading">
+                        <span class="text-uppercase">Agreements</span>
+                    </div>
+
+                    <div class="panel-body">
+                        <p class="text-justify">
+                            For each of the agreements below, please read the terms and Sign (by mouse or touch) to
+                            confirm
+                        </p>
+
+                        <br/><br/>
+
+                        <div id="agreement">
+                            <table class="table" ng-repeat="signature in signatures">
+                                <tr>
+                                    <td>
+                                        <p><strong>{{signature.agreement.title}}</strong></p>
+
+                                        <div ng-bind-html="signature.agreement.details"></div>
+
+                                        <div ng-show="signature.error != null" class="alert alert-danger">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <p>{{signature.error}}</p>
+                                        </div>
+
+                                        <div class="pull-left" ng-show="signature.signIt">
+                                            <canvas id="{{signature.canvasId}}" width="600" height="150"
+                                                    style="border: dashed #F0F0F0 5px"></canvas>
+                                            <hr/>
+                                            <p>Sign above Line
+                                                <a class="btn btn-link pull-right"
+                                                   ng-click="clear(signature.canvasId)"><span
+                                                        class="glyphicon glyphicon-remove-sign"></span> Clear</a>
+                                            </p>
+                                        </div>
+
+                                        <div class="pull-left" ng-show="signature.editIt">
+
+                                            <img id='signature' ng-src='{{signature.sign}}'
+                                                 style="border: dashed #F0F0F0 5px" alt="Opps! signature not loading"/>
+                                            <hr/>
+                                            <p><strong>Sign above line</strong>
+                                                <a class="btn btn-link pull-right"
+                                                   ng-click="edit(signature.canvasId)"><span
+                                                        class="glyphicon glyphicon-edit"></span> Edit</a>
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel-footer clearfix">
+                        <div class="pull-right">
+                            <!--<button class="btn btn-danger right" type="button" ng-click="cancel()">-->
+                            <!--<span class="glyphicon glyphicon-circle-arrow-left"> </span> Cancel-->
+                            <!--</button>-->
+
+                            <button class="btn btn-success right" type="submit" ng-disabled="isOrganization">
+                                Submit <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<div layout:fragment="custom-scripts">
+    <script src="/js/controllers/registration-controller.js"
+            th:src="@{/js/controllers/registration-controller.js}"></script>
+    <script src="/js/service/program.service.js" th:src="@{/js/service/program.service.js?version=1.0}"></script>
+    <script src="/js/service/registration.service.js?version=1.0" th:src="@{/js/service/registration.service.js?version=1.0}"></script>
+    <script src="/js/service/profile.service.js" th:src="@{/js/service/profile.service-0.1.js}"></script>
+    <script src="/js/service/user.service.js" th:src="@{/js/service/user.service.js}"></script>
+    <script src="/js/underscore.js" th:src="@{/js/underscore.js}"></script>
+</div>
+</body>
+</html>

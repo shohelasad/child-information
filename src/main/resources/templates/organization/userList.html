@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org" layout:decorator="layout/main">
+
+<head>
+    <title>User List</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container" style="margin-top: 100px">
+
+        <div class="row">
+            <div class="col-md-3">
+                <div layout:include="layout/common-fragment :: sidebar"></div>
+            </div>
+            
+            <div class="col-md-9">
+            
+                <div th:if="${message}" class="alert alert-info">
+		            <p th:text="${message}"></p>
+		        </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading contains-buttons">
+		                <div class="btn-group pull-right">
+		                    <a type="button" href="#" class="btn btn-default btn-xs" th:href="@{/organization/new-user}">
+		                        <span class="glyphicon glyphicon-plus"></span>
+		                    </a>
+		                </div>
+                		<p class="text-uppercase"> User List </p>
+
+            		</div>
+           
+                    <div class="panel-body">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr class="info">
+                                <td>Email</td>
+                                <td>First Name</td>
+                                <td>Last Name</td>
+                                <th>Locked</th>
+                                <td align="center">#</td>
+                                <td align="center">#</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user, iterStat : ${users}" th:class="${iterStat.odd}? 'odd'">
+                                <td th:text="${user.email}"></td>
+                                <td th:text="${user.firstName}"></td>
+                                <td th:text="${user.lastName}"></td>
+                            	<td th:text="${user.isAccountNonLocked() } ? 'No' : 'Yes'"></td>
+        
+                            	<td align="center"><a class="btn" href="#" th:href="@{'/user/' + ${user.id} + '/profile'}"><span class="glyphicon glyphicon-edit"></span></a></td> 
+	
+	                        	<td align="center">
+	                        	
+	                        	<div th:switch="${user.isAccountNonLocked()}">
+	                        		<span th:case="${true}">
+	                        		<a th:href="@{#}" class="btn" th:onclick="'javascript:lockUser(\'' + ${user.id} + '\');'">
+	                                		Lock
+	                                	</a>
+	                        		</span>
+	                        		<span th:case="${false}">
+	                        		<a th:href="@{#}" class="btn" th:onclick="'javascript:unlockUser(\'' + ${user.id} + '\');'">
+	                                		Unlock
+	                                	</a>
+	                        		</span>
+	                        	</div>
+
+		                            <script type="text/javascript">
+		                                function lockUser(userId){ 
+		                                    if(confirm("Are you sure you want to lock this?")) {
+		                                        $("#lock-user-"+userId).submit();
+		                                    }
+		                                }
+		                                function unlockUser(userId){ 
+		                                    if(confirm("Are you sure you want to unlock this?")) {
+		                                        $("#unlock-user-"+userId).submit();
+		                                    }
+		                                }
+		                                
+		                            </script>
+		                            <form style="visibility: hidden" th:id="'lock-user-' +${user.id}" method="post" action="#" th:action="@{/organization/user/lock/__${user.id}__}">
+		                            </form>
+		                             <form style="visibility: hidden" th:id="'unlock-user-' +${user.id}" method="post" action="#" th:action="@{/organization/user/unlock/__${user.id}__}">
+		                            </form>
+	                        	</td>
+	                        </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="panel-footer clearfix">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+
+</html>

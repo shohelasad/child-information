@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/main">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Registration History</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container marketing" style="margin-top: 100px">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><span class="text-uppercase">Completed registrations</span></div>
+            <div class="panel-body">
+                <table th:unless="${#sets.isEmpty(registrations)}" class="table table-hover table-bordered">
+                    <thead>
+                    <tr class="info">
+                        <th>Organization</th>
+                        <th>Program</th>
+                        <th>Section</th>
+                        <th>Person</th>
+                        <th>Reg. date</th>
+                        <th>View/Edit</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="registration, iterStat : ${registrations}" th:class="${iterStat.odd}? 'odd'">
+                        <td>
+                            <a th:href="@{/organizations/__${registration.program.organization.slug}__}">
+                                <span th:text="${registration.program.organization.name}"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a th:href="@{/programs/__${registration.program.slug}__}">
+                                <span th:text="${registration.program.name}"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <span th:text="${registration.getSectionNames()}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${registration.registrantName}"></span>
+                        </td>
+
+                        <td th:text="${#dates.format(registration.registrationDate, 'MMMM dd, yyyy')}">registrationDate
+                        </td>
+                        <td align="center"><a class="btn" href="#"
+                                              th:href="@{/edit-registration/__${registration.program.slug}__?registrationId=__${registration.id}__}"><span
+                                class="glyphicon glyphicon-edit"></span></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel panel-danger">
+            <div class="panel-heading"><span class="text-uppercase">Canceled registrations</span></div>
+            <div class="panel-body">
+                <table th:unless="${#sets.isEmpty(registrationsCanceled)}" class="table table-hover table-bordered">
+                    <thead>
+                    <tr class="info">
+                        <th>Organization</th>
+                        <th>Program</th>
+                        <th>Section</th>
+                        <th>Person</th>
+                        <th>Reg. date</th>
+                        <th>View/Edit</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="registration, iterStat : ${registrationsCanceled}" th:class="${iterStat.odd}? 'odd'">
+                        <td>
+                            <a th:href="@{/organizations/__${registration.program.organization.slug}__}">
+                                <span th:text="${registration.program.organization.name}"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a th:href="@{/programs/__${registration.program.slug}__}">
+                                <span th:text="${registration.program.name}"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <span th:text="${registration.getSectionNames()}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${registration.registrantName}"></span>
+                        </td>
+
+                        <td th:text="${#dates.format(registration.registrationDate, 'MMMM dd, yyyy')}">registrationDate
+                        </td>
+                        <td align="center"><a class="btn" href="#"
+                                              th:href="@{/edit-registration/__${registration.program.slug}__?registrationId=__${registration.id}__}"><span
+                                class="glyphicon glyphicon-edit"></span></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
